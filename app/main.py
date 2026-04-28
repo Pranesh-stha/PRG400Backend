@@ -7,6 +7,9 @@ from sqlalchemy import text
 from app.config import settings
 from app.database import engine
 from app.routes import auth as auth_routes
+from app.routes import bookings as booking_routes
+from app.routes import properties as property_routes
+from app.routes import reviews as review_routes
 
 
 @asynccontextmanager
@@ -32,6 +35,9 @@ app.add_middleware(
 )
 
 app.include_router(auth_routes.router)
+app.include_router(property_routes.router)
+app.include_router(booking_routes.router)
+app.include_router(review_routes.router)
 
 
 @app.get("/", tags=["meta"])
