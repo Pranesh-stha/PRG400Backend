@@ -3,7 +3,7 @@ from datetime import date as date_type
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -86,6 +86,7 @@ async def list_properties(
     db: Annotated[AsyncSession, Depends(get_db)],
     city: str | None = None,
     country: str | None = None,
+    location: str | None = None,
     property_type: str | None = None,
     min_price: float | None = None,
     max_price: float | None = None,
@@ -101,6 +102,13 @@ async def list_properties(
         filters.append(Property.city.ilike(f"%{city}%"))
     if country:
         filters.append(Property.country.ilike(f"%{country}%"))
+    if location:
+        filters.append(
+            or_(
+                Property.city.ilike(f"%{location}%"),
+                Property.country.ilike(f"%{location}%"),
+            )
+        )
     if property_type:
         filters.append(Property.property_type == property_type)
     if min_price is not None:
