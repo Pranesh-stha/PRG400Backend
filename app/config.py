@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
     FRONTEND_URL: str = "http://localhost:5173"
+    PORT: int = 8000  # Factor VII: port binding via environment variable
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
